@@ -1,3 +1,3 @@
 #!/bin/bash
-docker build -t mdjango django
+docker build -t loco-django django
 
