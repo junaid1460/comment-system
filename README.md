@@ -1,6 +1,6 @@
 # Comment System
 
-# Steps
+## Steps
 1. Build image first (run `bash build.sh`)
 2. First time setup / maintainance
     - to get django container shell run `docker-compose run shell bash`
@@ -15,5 +15,5 @@
     - enable the service `sudo systemctl enable $SERVICE_NAME`
     - run the service `sudo service $SERVICE_NAME start`
 
-# LICENCE
+## LICENCE
 MIT
