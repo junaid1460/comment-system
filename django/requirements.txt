@@ -1,3 +1,6 @@
 django
 mysqlclient
 gunicorn
+djangorestframework
+markdown
+django-filter
