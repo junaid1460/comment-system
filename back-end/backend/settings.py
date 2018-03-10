@@ -75,11 +75,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'    : 'django_mongodb_engine',
-        'NAME'      : 'my_database',
-        'HOST'      : '10.10.10.2'
-        'USER'      : 'junaid'
-        'password'  : 'root'
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'eduvr',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '10.10.10.2',
+        'PORT': '3306',
     }
 }
 
