@@ -16,7 +16,7 @@ class ReplySerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     class Meta:
         model = Reply
-        fields = ('id', 'comment', 'content', 'by' ,'owner', 'username',)
+        fields = ('id', 'comment', 'content', 'by' ,'owner', 'username','created_at')
     def get_username(self, obj):
         return obj.by.username
     def get_owner(self, obj):
@@ -28,7 +28,7 @@ class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     class Meta:
         model = Comment
-        fields = ('id', 'post', 'content', 'by','owner', 'username', 'replies')
+        fields = ('id', 'post', 'content', 'by','owner', 'username', 'replies', 'created_at')
     def get_username(self, obj):
         return obj.by.username
     def get_owner(self, obj):
@@ -40,7 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     class Meta:
         model = Post
-        fields = ('id', 'comments' , 'content', 'owner', 'username', 'by')
+        fields = ('id', 'comments' , 'content','title', 'owner', 'username', 'by', 'created_at')
     def get_username(self, obj):
         return obj.by.username
     def get_owner(self, obj):
