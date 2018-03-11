@@ -50,42 +50,11 @@ import List, {
 
 
 import PostComponent from './posts';
+import MyMenu from './menu';
+import styles from './styles';
+import AccountButton from './account'
+import MakePost from './post'
 
-const styles = {
-  Toolbar: {
-  },
- paper: {
-    margin : '10vw auto',
-    minHeight : '70vh',
-    // padding : '10px',
-    zIndex: '10',
-    position : 'absolute',
-    minWidth : '80vw'
-  },
-  container :{
-    overflowY: 'auto',
-    height: '100vh',
-    display : 'flex',
-    position: 'absolute',
-    width: '100vw',
-    justifyContent: 'center'
-  },
-  list : {
-    margin: '10px'
-  },
-  card : {
-    width : '100%'
-  },
-  actions : {
-    display: 'flex',
-    alignItems: 'right',
-    justifyContent: 'right'
-  },
-  btn : {
-    color: 'white',
-    textDecoration : 'none'
-  }
-};
 
 
 class Login extends Component {
@@ -145,7 +114,6 @@ fetch('/login/', {
     </ul></ListItem>
   }
   render() {
-    console.log(window.state);
     if(!window.state) {
       return <Card> 
           <CardContent>
@@ -156,7 +124,7 @@ fetch('/login/', {
     let errors = this.error(this)
     return (
       
-          <div>
+          <div style={{background: 'gray'}}>
             <form action="/login/" role="form" method="post"  onSubmit={this.onclick.bind(this)}>
             <input type='hidden' name='csrfmiddlewaretoken' value={window.state.token} />
                     <input type="hidden" name="next" value="/" />
@@ -206,84 +174,17 @@ fetch('/login/', {
 
 
 
-class MyMenu extends Component {
-  state = {
-    anchorEl: null,
-  };
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
 
-  render() {
-    const { anchorEl } = this.state;
-      if (this.props.test) {
 
-          return  <div>
-                <IconButton aria-owns={anchorEl ? 'fade-menu' : null}
-          aria-haspopup="true"
-                  onClick={this.handleClick}
-                >
-                  <MoreVertIcon/>
-                </IconButton>
-                <Menu
-                  id="fade-menu"
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={this.handleClose}
-                  transition={Fade}
-                  onClick = {this.handleClose}
-                >
-                 { this.props.children }
 
-                </Menu>
-        </div>
-      }
-      else {
-          return false;
-      }
-  }
-};
-
-class AccountButton extends Component {
-  state = {
-    open : false
-  }
-  login() {
-    this.setState({
-      open : true
-    })
-  }
-
-  logout(){
-    window.location.href = '/api/logout?next=/'
-  }
-  render (){
-    if(this.props.test == false){
-   
-      return <Link to = {'/Login'} > <Button style={styles.btn} onClick={this.login.bind(this)} >
-      Login / Register
-    </Button> </Link>
-    } else {
-      return  <Button color="inherit" onClick={this.logout} >
-      Logout ({window.state.user})
-    </Button>
-    }
-  }
-}
 
 class App extends Component {
   constructor(props){
     super(props);
     this.state = window.state;
-    console.log(this.state)
   }
 
   render() {
-  
-    console.log(window.state)
     if(!window.state){
       return null
     }
@@ -293,17 +194,15 @@ class App extends Component {
         <AppBar color="primary"  style={styles.Toolbar}>
         <Toolbar >
           <AccountButton test={this.state.auth} />
-         
+          
         </Toolbar>
         </AppBar>
-          <Paper style={styles.paper}>
+          <div style={styles.paper}>
               <List style={styles.list}>
-                {/* <ListItem >
-                <ListSubheader>Posts</ListSubheader>
-                </ListItem> */}
+               
                 {this.state.posts}
               </List>
-          </Paper>
+          </div>
         </div>
        
     
@@ -324,7 +223,6 @@ class RR  extends Component {
       credentials: "same-origin"
     }).then((v)=>{
       v.json().then(e =>{
-        console.log("setting state")
         this.setState(e)
         window.state = this.state;
         this.setState(e)
@@ -343,7 +241,7 @@ class RR  extends Component {
         let val =  v.map(x => {
             let date = new Date(x.created_at);
             date =  monthNames[date.getMonth()] + " " + date.getDate() + ", "+ date.getFullYear();
-            return <ListItem>
+            return <ListItem key={x.id}>
                   <Card style={styles.card}>
                   <CardHeader
                         avatar={<a >
@@ -392,11 +290,11 @@ class RR  extends Component {
     
   }
   render(){
-   console.log("update")
     return <Router>
         <Sswitch>
           <Route  exact path='/login' component={Login} />
           <Route  exact path='/post/:pid' component={PostComponent} />
+          <Route  exact path='/create' component={MakePost} />
           <Route exact  path='/' component={App} />
         </Sswitch>
     </Router>
