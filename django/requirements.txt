@@ -2,3 +2,4 @@ django
 mysqlclient
 gunicorn
 djangorestframework
+django-cors-headers
