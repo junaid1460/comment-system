@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
+from django.http import HttpResponse, JsonResponse
+from django.middleware.csrf import get_token
 from rest_framework.parsers import FileUploadParser,MultiPartParser,FormParser
 # Create your views here.
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets, generics
 from database.models import Post, Comment, Reply
-
+from django.contrib.auth.middleware import get_user
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -34,7 +34,7 @@ def getSerializers(dname, dmodel, dfields, pred):
         def get_username(self, obj):
             return obj.by.username
         def get_owner(self, obj):
-            # print(self.context['request'].user)
+            print(get_user(self.context['request']))
             return obj.by == self.context['request'].user
 
     # ViewSets define the view behavior.
@@ -85,3 +85,11 @@ comments = getSerializers(dname = "comments",
                             )
                         )
 router =  [replies, comments, posts]
+
+
+def loggedIn(req):
+    # print(req.user.)
+    if req.user.is_authenticated:
+        return JsonResponse({ 'auth' : True , 'token' : get_token(req)})
+    return JsonResponse({ 'auth' : False, 'token' : get_token(req)})
+
