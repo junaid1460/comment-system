@@ -61,7 +61,7 @@ def getSerializers(dname, dmodel, dfields, pred):
 # Routers provide an easy way of automatically determining the URL conf.
 replies = getSerializers(dname = "replies", 
     dmodel = Reply,
-    dfields = ('comment', 'by', 'content', 'created_at', 'modified_at'), 
+    dfields = ('ide','comment', 'by', 'content', 'created_at', 'modified_at'), 
     pred = lambda x: Reply(
                             by = User.objects.get(id = x['by']),
                             comment = Comment.objects.get(id = x['comment']), 
@@ -70,7 +70,7 @@ replies = getSerializers(dname = "replies",
                         )
 posts = getSerializers(dname = "posts", 
     dmodel = Post,
-    dfields = ('by', 'content','title', 'created_at', 'modified_at'), 
+    dfields = ('id', 'by', 'content','title', 'created_at', 'modified_at'), 
     pred = lambda x: Post(
                             by = User.objects.get(id = x['by']),
                             content = x['content'] 
@@ -78,7 +78,7 @@ posts = getSerializers(dname = "posts",
                         )
 comments = getSerializers(dname = "comments", 
     dmodel = Comment,
-    dfields = ('post', 'by', 'content', 'created_at', 'modified_at'), 
+    dfields = ('id','post', 'by', 'content', 'created_at', 'modified_at'), 
     pred = lambda x: Comment(
                             by = User.objects.get(id = x['by']),
                             post = Post.objects.get(id = x['post']), 
