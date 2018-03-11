@@ -47,6 +47,10 @@ import List, {
   ListItemSecondaryAction,
   ListItemText,
 } from 'material-ui/List';
+
+
+import PostComponent from './posts';
+
 const styles = {
   Toolbar: {
   },
@@ -365,9 +369,11 @@ class RR  extends Component {
                     </CardContent>
                     <CardActions>
                       <div className="text" style={styles.actions}>
+                      <Link to={'/post/' + x.id } >
                         <Button size="small" color="primary">
                           show post
                         </Button>
+                      </Link>
                       </div>
                     </CardActions>
                   </Card>
@@ -390,7 +396,8 @@ class RR  extends Component {
     return <Router>
         <Sswitch>
           <Route  exact path='/login' component={Login} />
-          <Route exact path='/' component={App} />
+          <Route  exact path='/post/:pid' component={PostComponent} />
+          <Route exact  path='/' component={App} />
         </Sswitch>
     </Router>
 
