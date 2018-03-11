@@ -61,7 +61,7 @@ def getSerializers(dname, dmodel, dfields, pred):
 # Routers provide an easy way of automatically determining the URL conf.
 replies = getSerializers(dname = "replies", 
     dmodel = Reply,
-    dfields = ('ide','comment', 'by', 'content', 'created_at', 'modified_at'), 
+    dfields = ('id','comment', 'by', 'content', 'created_at', 'modified_at'), 
     pred = lambda x: Reply(
                             by = User.objects.get(id = x['by']),
                             comment = Comment.objects.get(id = x['comment']), 
@@ -134,3 +134,40 @@ def login(req):
         return JsonResponse({'auth' : False, 'message': ['invalid username/password.']})
     return ret(req, user)
 
+def addcomment(req):
+    # print(req.user.)
+    if not req.user.is_authenticated:
+        return Http404()
+    data = req.body.decode('utf8')
+    data = json.loads(data)
+    post = data.get('post')
+    content = data.get('content')
+    comment = Comment(by = req.user, post = Post.objects.get(id=post), content = content)
+    comment.save()
+    return JsonResponse({'status' : True})
+
+def addreply(req):
+    # print(req.user.)
+    if not req.user.is_authenticated:
+        return Http404()
+    data = req.body.decode('utf8')
+    data = json.loads(data)
+    print(data)
+    comment = data.get('comment')
+    content = data.get('content')
+    reply = Reply(by = req.user, comment = Comment.objects.get(id=comment), content = content)
+    reply.save()
+    print(reply)
+    return JsonResponse({'status' : True})
+
+def addpost(req):
+    # print(req.user.)
+    if not req.user.is_authenticated:
+        return Http404()
+    data = req.body.decode('utf8')
+    data = json.loads(data)
+    title = data.get('title')
+    content = data.get('content')
+    reply = Post(by = req.user, title = title, content = content)
+    reply.save()
+    return JsonResponse({'status' : True})
