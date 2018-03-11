@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.middleware.csrf import get_token
 from rest_framework.parsers import FileUploadParser,MultiPartParser,FormParser
 # Create your views here.
@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets, generics
 from database.models import Post, Comment, Reply
 from django.contrib.auth.middleware import get_user
+from django.contrib.auth import authenticate, login as signin
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -90,6 +91,46 @@ router =  [replies, comments, posts]
 def loggedIn(req):
     # print(req.user.)
     if req.user.is_authenticated:
-        return JsonResponse({ 'auth' : True , 'token' : get_token(req)})
-    return JsonResponse({ 'auth' : False, 'token' : get_token(req)})
+        return JsonResponse({ 'auth' : True , 'token' : get_token(req), 'user' : str(req.user)})
+    return JsonResponse({ 'auth' : False, 'token' : get_token(req), 'user' : str(req.user)})
+
+import json
+
+
+def ret(req, user):
+    try:
+        signin(req, user)
+        return JsonResponse({'auth' : True})
+    except BaseException as e:
+        return JsonResponse({'auth' : False, 'message' : ['something went wrong!.']})
+
+def login(req):
+    if req.method != 'POST':
+        return Http404()
+    data = json.loads(req.body.decode('utf-8'))
+    print("hello")
+    username = data.get('username')
+    password = data.get('password')
+    print(username, password)
+    user = authenticate(username = username, password = password)
+    if user is None:
+        try:
+            user = User.objects.get(username = username)
+        except:
+            pass
+        if user is None:
+            message = []
+            if len(username) < 4:
+                message += ["new username must be at least 4 letters long."]
+            if len(password) < 8:
+                message += ["password must have least 8 characters."]
+            if len(message) > 0:
+                return JsonResponse({'auth' : False, 'message': message})
+            user = User.objects.create_user(username = username,email =None, password= password)
+            user.save()
+            return ret(req, user)
+            
+            
+        return JsonResponse({'auth' : False, 'message': ['invalid username/password.']})
+    return ret(req, user)
 
