@@ -17,15 +17,19 @@ from django.contrib import admin
 from django.urls import path, include
 from api.views import router, loggedIn, login
 from rest_framework import routers
+from api.all import PostListView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login),
     path('api/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/auth', loggedIn)
+    path('api/auth', loggedIn),
+    # path('api/allofpost', PostListView.as_view())
 ]
 r = routers.DefaultRouter()
-for route in router:
+for route in router  + [PostListView] :
     rn = routers.SimpleRouter()
     rn.register(route.name, route)
     r.registry.extend(rn.registry)
+
+
 urlpatterns += [path('api/', include(r.urls))]
