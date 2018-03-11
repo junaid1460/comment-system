@@ -4,6 +4,9 @@ import './App.css';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import AppBar from 'material-ui/AppBar' 
 import Toolbar from 'material-ui/Toolbar';
+import Input, { InputLabel } from 'material-ui/Input';
+import TextField from 'material-ui/TextField';
+import { FormControl } from 'material-ui/Form';
 // import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import AccountCircle from 'material-ui-icons/AccountCircle';
@@ -25,7 +28,7 @@ import FavoriteIcon from 'material-ui-icons/Favorite';
 import ShareIcon from 'material-ui-icons/Share';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
-
+import { BrowserRouter as Router, Switch as Sswitch, Route, Link } from 'react-router-dom';
 
 import { withStyles } from 'material-ui/styles';
 // import Button from 'material-ui/Button';
@@ -73,8 +76,131 @@ const styles = {
     display: 'flex',
     alignItems: 'right',
     justifyContent: 'right'
+  },
+  btn : {
+    color: 'white',
+    textDecoration : 'none'
   }
 };
+
+
+class Login extends Component {
+  state = {
+    error: []
+  }
+  onclick(e){
+    e.preventDefault()
+    let val = JSON.stringify({
+      
+      'username' : this._username,
+      'password' : this._password
+    } )
+    // console.log(val);
+fetch('/login/', {
+  credentials: "same-origin",
+    method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRFToken' : window.state.token,
+      },
+      body:val
+    }).then(v => {
+      v.json().then(e =>{
+        if(e.auth){
+          window.state.auth = true
+          window.location = '/'
+        }else{
+          console.log(e.message)
+          this.setState({error : e.message})
+        }
+      })
+    }).catch(e=>{console.log(e)})
+      
+  }
+  _error = []
+  _username = "";
+  _password = "";
+  username(e){
+    this._username = e.target.value;
+  }
+  password(e){
+    this._password = e.target.value;
+  }
+  error(th){
+  
+    if(th.state.error.length == 0){
+      // console.log("null")
+      return null
+    }
+    // console.log("not null")
+    
+    return <ListItem style={{color: 'red'}}>
+      <ul> 
+      {th.state.error.map(e=>{return <li> {e} </li> })}
+    </ul></ListItem>
+  }
+  render() {
+    console.log(window.state);
+    if(!window.state) {
+      return <Card> 
+          <CardContent>
+            <h1> Connecting ... </h1>
+            </CardContent>
+        </Card>
+    }
+    let errors = this.error(this)
+    return (
+      
+          <div>
+            <form action="/login/" role="form" method="post"  onSubmit={this.onclick.bind(this)}>
+            <input type='hidden' name='csrfmiddlewaretoken' value={window.state.token} />
+                    <input type="hidden" name="next" value="/" />
+        <div style = {{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width : '100vw'}}>
+        <Paper style = {{width: '300px', display: 'flex', justifyContent: 'center'}}>
+        <List>
+         <ListSubheader >Form</ListSubheader>
+         {errors}
+          <ListItem>
+            
+        <FormControl >
+        <InputLabel htmlFor="username">
+          Username
+        </InputLabel>
+        <Input name="username" onChange = {this.username.bind(this)}
+          id="username"/>
+          </FormControl>
+          </ListItem>
+          <ListItem>
+        <FormControl>
+        <InputLabel htmlFor="password">
+          password
+        </InputLabel>
+        <Input name="password" type="password" onChange = {this.password.bind(this)}
+          id="password"/>
+      </FormControl>
+      </ListItem>
+      
+      <ListItem>
+        <Button type="submit" onClick={this.onclick.bind(this)}>Login / Register</Button>
+        </ListItem>
+        
+      </List>
+            
+                  </Paper>  
+</div>
+                
+              </form>
+          </div>
+    
+    );
+  }
+ 
+}
+
+
+
+
 
 class MyMenu extends Component {
   state = {
@@ -118,21 +244,27 @@ class MyMenu extends Component {
 };
 
 class AccountButton extends Component {
+  state = {
+    open : false
+  }
   login() {
-    window.location.href = '/api/login/?next=/'
+    this.setState({
+      open : true
+    })
   }
 
   logout(){
-    window.location.href = '/api/logout/?next=/'
+    window.location.href = '/api/logout?next=/'
   }
   render (){
     if(this.props.test == false){
-      return <Button color="inherit" onClick={this.login} >
-      Login
-    </Button>
+   
+      return <Link to = {'/Login'} > <Button style={styles.btn} onClick={this.login.bind(this)} >
+      Login / Register
+    </Button> </Link>
     } else {
       return  <Button color="inherit" onClick={this.logout} >
-      Logout
+      Logout ({window.state.user})
     </Button>
     }
   }
@@ -141,21 +273,60 @@ class AccountButton extends Component {
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      posts : [],
-      auth : false,
-      token : ""
-    }
+    this.state = window.state;
+    console.log(this.state)
+  }
 
+  render() {
+  
+    console.log(window.state)
+    if(!window.state){
+      return null
+    }
+    this.state = window.state
+    return (
+        <div style={styles.container}>
+        <AppBar color="primary"  style={styles.Toolbar}>
+        <Toolbar >
+          <AccountButton test={this.state.auth} />
+         
+        </Toolbar>
+        </AppBar>
+          <Paper style={styles.paper}>
+              <List style={styles.list}>
+                {/* <ListItem >
+                <ListSubheader>Posts</ListSubheader>
+                </ListItem> */}
+                {this.state.posts}
+              </List>
+          </Paper>
+        </div>
+       
+    
+    );
+  }
+}
+
+class RR  extends Component {
+  static state = {
+    auth : false,
+    token : '',
+    posts : []
+  }
+  constructor(props){
+    super(props);
+    window.state = this.state
     fetch('/api/auth', {
       credentials: "same-origin"
     }).then((v)=>{
       v.json().then(e =>{
-        console.log(e)
+        console.log("setting state")
         this.setState(e)
+        window.state = this.state;
+        this.setState(e)
+        
       })
     })
-
 
     fetch('/api/posts/?format=json', {
       credentials: "same-origin"
@@ -165,10 +336,7 @@ class App extends Component {
       ];
 
       value.json().then((v)=>{
-        console.log(v[0].content)
-        this.setState({
-          posts : v.map(x => {
-            console.log(x)
+        let val =  v.map(x => {
             let date = new Date(x.created_at);
             date =  monthNames[date.getMonth()] + " " + date.getDate() + ", "+ date.getFullYear();
             return <ListItem>
@@ -204,67 +372,29 @@ class App extends Component {
                     </CardActions>
                   </Card>
                 </ListItem>
+              })
+            
+          
+          this.setState({posts : val})
+          window.state = this.state
+          this.setState({posts : val})
+          
+            })
+          }).catch(e => {
+            console.log(e)
           })
-        })
-      })
-    })
+    
   }
+  render(){
+   console.log("update")
+    return <Router>
+        <Sswitch>
+          <Route  exact path='/login' component={Login} />
+          <Route exact path='/' component={App} />
+        </Sswitch>
+    </Router>
 
-  render() {
-  
-   
-    return (
-      <div>
-      
-        <div style={styles.container}>
-        <AppBar color="primary"  style={styles.Toolbar}>
-        <Toolbar >
-          <AccountButton test={this.state.auth} />
-         
-        </Toolbar>
-        </AppBar>
-          <Paper style={styles.paper}>
-              <List style={styles.list}>
-                {/* <ListItem >
-                <ListSubheader>Posts</ListSubheader>
-                </ListItem> */}
-                {this.state.posts}
-              </List>
-          </Paper>
-        </div>
-      
-    </div>
-    );
   }
 }
 
-export default App;
-
-
-
-class SimpleDialog extends Component {
-  handleClose = () => {
-    this.props.onClose(this.props.selectedValue);
-  };
-
-  handleListItemClick = value => {
-    this.props.onClose(value);
-  };
-
-  render() {
-    const { classes, onClose, selectedValue, ...other } = this.props;
-
-    return (
-      <Dialog onClose={this.handleClose} aria-labelledby="simple-dialog-title" {...other}>
-        <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
-        
-          <div>
-
-            hello
-          </div>
-      </Dialog>
-    );
-  }
-}
-
-const DialogWrapped = withStyles(styles)(SimpleDialog);
+export default RR;
