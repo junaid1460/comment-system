@@ -21,7 +21,8 @@ const styles = {
       margin: '10px'
     },
     card : {
-      width : '100%'
+      width : '100%',
+      maxWidth: '600px'
     },
     actions : {
       display: 'flex',
