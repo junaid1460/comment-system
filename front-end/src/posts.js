@@ -198,8 +198,8 @@ class PostComponent extends Component {
          
         </Toolbar>
         </AppBar>    
-        <div style={{width : '100vw', display: 'flex', justifyContent: 'center'}}>
-        <Card style={{ marginTop: '20vh',width : '100%', maxWidth: '600px'}} >
+        <div style={{margin:'0 auto', width : '95vw', display: 'flex', justifyContent: 'center'}}>
+        <Card style={{ marginTop: '13vh',width : '100%', maxWidth: '600px'}} >
         <CardHeader 
               avatar={<a >
                 <Avatar aria-label="Recipe" >
