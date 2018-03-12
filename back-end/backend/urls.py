@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api.views import router, loggedIn, login, addcomment, addreply, addpost
+from api.views import router, loggedIn, login, addcomment, deletePost
+from api.views import addreply, addpost, deleteReply, deleteComment
 from rest_framework import routers
 from api.all import PostListView
 urlpatterns = [
@@ -25,10 +26,15 @@ urlpatterns = [
     path('api/auth', loggedIn),
     path('api/addcomment/', addcomment),
     path('api/addreply/', addreply),
-    path('api/addpost/', addpost)
+    path('api/addpost/', addpost),
+    path('api/deletereply/', deleteReply),
+    path('api/deletecomment/', deleteComment),
+    path('api/deletepost/', deletePost),
     # path('api/allofpost', PostListView.as_view())
 ]
 r = routers.DefaultRouter()
+
+
 for route in router  + [PostListView] :
     rn = routers.SimpleRouter()
     rn.register(route.name, route)
