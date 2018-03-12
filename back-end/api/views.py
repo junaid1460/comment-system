@@ -35,7 +35,7 @@ def getSerializers(dname, dmodel, dfields, pred):
         def get_username(self, obj):
             return obj.by.username
         def get_owner(self, obj):
-            print(get_user(self.context['request']))
+            # print(get_user(self.context['request']))
             return obj.by == self.context['request'].user
 
     # ViewSets define the view behavior.
@@ -128,6 +128,7 @@ def login(req):
                 return JsonResponse({'auth' : False, 'message': message})
             user = User.objects.create_user(username = username,email =None, password= password)
             user.save()
+        
             return ret(req, user)
             
             
@@ -170,4 +171,41 @@ def addpost(req):
     content = data.get('content')
     reply = Post(by = req.user, title = title, content = content)
     reply.save()
+    return JsonResponse({'status' : True})
+
+
+def deleteReply(req):
+    # print(req.user.)
+    if not req.user.is_authenticated:
+        return Http404()
+    data = req.body.decode('utf8')
+    data = json.loads(data)
+    id = data.get('id')
+    reply = Reply.objects.get(id = id)
+    if reply.by == req.user:
+        reply.delete()
+    return JsonResponse({'status' : True})
+
+def deleteComment(req):
+    # print(req.user.)
+    if not req.user.is_authenticated:
+        return Http404()
+    data = req.body.decode('utf8')
+    data = json.loads(data)
+    id = data.get('id')
+    reply = Comment.objects.get(id = id)
+    if reply.by == req.user:
+        reply.delete()
+    return JsonResponse({'status' : True})
+
+def deletePost(req):
+    # print(req.user.)
+    if not req.user.is_authenticated:
+        return Http404()
+    data = req.body.decode('utf8')
+    data = json.loads(data)
+    id = data.get('id')
+    reply = Post.objects.get(id = id)
+    if reply.by == req.user:
+        reply.delete()
     return JsonResponse({'status' : True})
