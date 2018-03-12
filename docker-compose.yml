@@ -20,17 +20,7 @@ services:
       loco:
         ipv4_address: 10.10.10.2
     volumes: ['./mysqldata:/var/lib/mysql']
-  web-setup:
-    image: loco-django
-    volumes: ['./back-end:/usr/src/app']
-    depends_on:
-      - react-build
-      - django-static
-      - sql
-    command: bash -c "sleep 30 && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0:5000"
-    networks:
-      loco:
-        ipv4_address: 10.10.10.3
+
   web:
     image: loco-django
     volumes: ['./back-end:/usr/src/app']
@@ -49,13 +39,16 @@ services:
       loco:
         ipv4_address: 10.10.10.4
     depends_on:
+    
       - web
       
-  react-build:
+  build-static:
     image: node:8
     volumes: ["./front-end:/home/node/app"]
     working_dir: '/home/node/app'
     command: bash -c "npm i && npm run build"
+    depends_on:
+      - django-static
   django-static:
     image: loco-django
     volumes: ['.:/usr/src/app']
