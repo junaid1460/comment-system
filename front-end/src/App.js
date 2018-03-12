@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import purple from 'material-ui/colors/purple';
 import ListSubheader from 'material-ui/List/ListSubheader';
 import AppBar from 'material-ui/AppBar' 
 import Toolbar from 'material-ui/Toolbar';
@@ -210,11 +212,42 @@ class App extends Component {
   }
 }
 
+
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: '#4CAF50' }, // Purple and green play nicely together.
+    secondary: { main: '#11cb5f' },
+    action : {main :'#4CAF50'} // This is just green.A700 as hex.
+  },
+});
+
+
+
 class RR  extends Component {
   static state = {
     auth : false,
     token : '',
     posts : []
+  }
+  deletePost() {
+    let x = window.confirm("Are you sure?")
+      if(!x) return
+      console.log(this)
+      fetch('/api/deletepost/', {
+        credentials: "same-origin",
+          method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken' : window.state.token,
+            },
+            body : JSON.stringify({
+                id : this
+            })
+          }).then(e=>{
+              window.location.reload()
+          })
   }
   constructor(props){
     super(props);
@@ -241,7 +274,7 @@ class RR  extends Component {
         let val =  v.map(x => {
             let date = new Date(x.created_at);
             date =  monthNames[date.getMonth()] + " " + date.getDate() + ", "+ date.getFullYear();
-            return <ListItem key={x.id}>
+            return <ListItem key={x.id} style={{display: 'flex', justifyContent: 'center'}}>
                   <Card style={styles.card}>
                   <CardHeader
                         avatar={<a >
@@ -253,12 +286,12 @@ class RR  extends Component {
 
                         action = {
                           <MyMenu test={x.owner}>
-                            <MenuItem > Delete</MenuItem>
+                            <MenuItem onClick = {this.deletePost.bind(x.id)} > Delete</MenuItem>
                           </MyMenu>
                         }
                         
                         title={x.title}
-                        subheader={date}
+                        subheader={<span>{x.username} <span style={{fontSize: '9pt'}}>On {date}</span></span>}
                       />
                     <CardContent>
                     <Typography component="p">
@@ -290,15 +323,17 @@ class RR  extends Component {
     
   }
   render(){
-    return <Router>
+    return <MuiThemeProvider theme = {theme}> 
+    
+    <Router>
         <Sswitch>
-          <Route  exact path='/login' component={Login} />
+          <Route  exact path='/join' component={Login} />
           <Route  exact path='/post/:pid' component={PostComponent} />
           <Route  exact path='/create' component={MakePost} />
           <Route exact  path='/' component={App} />
         </Sswitch>
     </Router>
-
+  </MuiThemeProvider>
   }
 }
 
