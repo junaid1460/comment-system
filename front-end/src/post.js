@@ -97,8 +97,9 @@ class MakePost extends Component {
         </Toolbar>
         </AppBar>
             <form method = "POST" action="/api/posts/" onSubmit = {this.submit.bind(this)}>
-            <input type='hidden' name='by' value="10" />
-                <Card style={{margin: '10vw',marginTop: '100px'}}>
+            <div style={{width : '100vw', display: 'flex', justifyContent: 'center'}}>
+
+                <Card style={{margin: '4vw',marginTop: '100px', width: '100%',  maxWidth: '600px'}}>
                 <CardContent>
                     <List>
                         <ListItem>
@@ -130,7 +131,9 @@ class MakePost extends Component {
                     <Button type="submit"> Post</Button>
                 </CardActions>
                 </Card>
+                </div>
             </form>
+
             </div>
         );
     }
