@@ -1,3 +1,4 @@
 /mysqldata
 .vscode
 *.pyc
+/static
