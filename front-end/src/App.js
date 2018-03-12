@@ -126,37 +126,33 @@ fetch('/login/', {
     let errors = this.error(this)
     return (
       
-          <div style={{background: 'gray'}}>
+          <div >
             <form action="/login/" role="form" method="post"  onSubmit={this.onclick.bind(this)}>
             <input type='hidden' name='csrfmiddlewaretoken' value={window.state.token} />
                     <input type="hidden" name="next" value="/" />
-        <div style = {{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', width : '100vw'}}>
-        <Paper style = {{width: '300px', display: 'flex', justifyContent: 'center'}}>
-        <List>
-         <ListSubheader >Form</ListSubheader>
-         {errors}
+        <div style = {{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', overflow: 'hidden', margin: '0 auto', maxWidth:'400px'}}>
+        <Paper style = {{width: '100%', maxWidth: '95vw', display: 'flex', justifyContent: 'center'}}>
+        
+        <List style={{width : '100%'}}>
           <ListItem>
-            
-        <FormControl >
-        <InputLabel htmlFor="username">
-          Username
-        </InputLabel>
-        <Input name="username" onChange = {this.username.bind(this)}
+          Login or Register
+          </ListItem>
+         <ListItem>
+         
+         {errors}
+         </ListItem>
+          <ListItem>
+          
+        <TextField label="Username" fullWidth placeholder="existing or new" name="username" onChange = {this.username.bind(this)}
           id="username"/>
-          </FormControl>
           </ListItem>
           <ListItem>
-        <FormControl>
-        <InputLabel htmlFor="password">
-          password
-        </InputLabel>
-        <Input name="password" type="password" onChange = {this.password.bind(this)}
+        <TextField label="Password" fullWidth placeholder="existing or new" name="password" type="password" onChange = {this.password.bind(this)}
           id="password"/>
-      </FormControl>
       </ListItem>
       
       <ListItem>
-        <Button type="submit" onClick={this.onclick.bind(this)}>Login / Register</Button>
+        <Button type="submit" fullWidth onClick={this.onclick.bind(this)}>submit</Button>
         </ListItem>
         
       </List>
@@ -274,7 +270,7 @@ class RR  extends Component {
         let val =  v.map(x => {
             let date = new Date(x.created_at);
             date =  monthNames[date.getMonth()] + " " + date.getDate() + ", "+ date.getFullYear();
-            return <ListItem key={x.id} style={{display: 'flex', justifyContent: 'center'}}>
+            return <ListItem key={x.id} style={{display: 'flex', justifyContent: 'center', padding: '0', paddingBottom:'10px'}}>
                   <Card style={styles.card}>
                   <CardHeader
                         avatar={<a >
@@ -324,7 +320,7 @@ class RR  extends Component {
   }
   render(){
     return <MuiThemeProvider theme = {theme}> 
-    
+    <div style={{paddingBottom: '100px',background: '#00BCD4'}}>
     <Router>
         <Sswitch>
           <Route  exact path='/join' component={Login} />
@@ -333,6 +329,7 @@ class RR  extends Component {
           <Route exact  path='/' component={App} />
         </Sswitch>
     </Router>
+    </div>
   </MuiThemeProvider>
   }
 }

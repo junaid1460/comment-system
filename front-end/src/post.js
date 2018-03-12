@@ -97,9 +97,9 @@ class MakePost extends Component {
         </Toolbar>
         </AppBar>
             <form method = "POST" action="/api/posts/" onSubmit = {this.submit.bind(this)}>
-            <div style={{width : '100vw', display: 'flex', justifyContent: 'center'}}>
+            <div style={{width : '95vw', display: 'flex', justifyContent: 'center', margin: '0 auto'}}>
 
-                <Card style={{margin: '4vw',marginTop: '100px', width: '100%',  maxWidth: '600px'}}>
+                <Card style={{marginTop: '11vh', width: '100%',  maxWidth: '600px'}}>
                 <CardContent>
                     <List>
                         <ListItem>

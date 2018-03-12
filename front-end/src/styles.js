@@ -2,23 +2,16 @@ const styles = {
     Toolbar: {
     },
    paper: {
-      margin : '10vw auto',
-      minHeight : '70vh',
-      // padding : '10px',
-      zIndex: '10',
-      position : 'absolute',
-      minWidth : '90vw'
+      margin : '0 auto',
+      width : '95vw'
     },
     container :{
       overflowY: 'auto',
-      height: '100vh',
       display : 'flex',
-      position: 'absolute',
-      width: '100vw',
       justifyContent: 'center'
     },
     list : {
-      margin: '10px'
+      marginTop: '10vh'
     },
     card : {
       width : '100%',
