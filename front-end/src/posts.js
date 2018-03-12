@@ -55,15 +55,6 @@ import styles from './styles';
 import AccountButton from './account'
 
 
-class Rif extends  Component {
-    render(){
-        if(this.props.test){
-            return this.props.children
-        }
-        return null
-    }
-}
-
 class Reply extends Component {
     state = {
         text: null,
@@ -132,6 +123,25 @@ class If extends Component {
 }
 
 class PostComponent extends Component {
+    deletePost() {
+        let x = window.confirm("Are you sure?")
+          if(!x) return
+          console.log(this)
+          fetch('/api/deletepost/', {
+            credentials: "same-origin",
+              method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken' : window.state.token,
+                },
+                body : JSON.stringify({
+                    id : this
+                })
+              }).then(e=>{
+                  window.location.href = '/'
+              })
+      }
     state = {
         post : null,
         error: 'Loading',
@@ -192,12 +202,7 @@ class PostComponent extends Component {
         let date = new Date(x.created_at);
         date =  monthNames[date.getMonth()] + " " + date.getDate() + ", "+ date.getFullYear();
         return   <div>
-             <AppBar color="primary"  style={styles.Toolbar}>
-        <Toolbar >
-          <AccountButton test={this.state.auth} />
-         
-        </Toolbar>
-        </AppBar>    
+       
         <div style={{margin:'0 auto', width : '95vw', display: 'flex', justifyContent: 'center'}}>
         <Card style={{ marginTop: '11vh',width : '100%', maxWidth: '600px'}} >
         <CardHeader 
@@ -210,7 +215,7 @@ class PostComponent extends Component {
 
               action = {
                 <MyMenu test={x.owner}>
-                  <MenuItem > Delete</MenuItem>
+                  <MenuItem onClick={this.deletePost.bind(x.id)} > Delete</MenuItem>
                 </MyMenu>
               }
               
