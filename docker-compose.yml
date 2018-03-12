@@ -48,8 +48,10 @@ services:
       loco:
         ipv4_address: 10.10.10.4
     depends_on:
-      - web
+      - django-static
       - react-build
+      - web
+      
   server-dev:
     image: nginx
     volumes: ['./nginx.debug.conf:/etc/nginx/nginx.conf', './static:/var/www/files']
@@ -60,7 +62,6 @@ services:
     working_dir: '/home/node/app'
     command: bash -c "npm i && npm run build"
   django-static:
-    # docker-compose run shell bash
     image: loco-django
     volumes: ['.:/usr/src/app']
     command: bash -c "rm -rf static;cd back-end;python manage.py collectstatic"
