@@ -85,18 +85,18 @@ class AccountButton extends Component {
       if(this.props.test == false || !window.state || !window.state.auth ){
      
         return <div style={{display:'flex', flexDirection: 'row', width: '100vw', justifyContent: 'center', alignItems: 'center'}}>
-            <a href='/'><IconButton  style={{color:'white',background : '#445cc2'}}> <PersonIcon /> </IconButton> </a>
+            <a href='/'><IconButton color="secondary"  style={{color:'white'}}> <PersonIcon /> </IconButton> </a>
       <Typography style={{width: '100%', padding:'5px'}} variant="title" color="inherit" >
       AnomPost
     </Typography>
-    <Link to = {'/Login'} > <Button style={styles.btn} onClick={this.login.bind(this)} >
+    <Link to = {'/join'} > <Button style={styles.btn} onClick={this.login.bind(this)} >
         Login 
       </Button> </Link>
     
       </div>
       } else {
         return  <div style={{display:'flex', flexDirection: 'row', width: '100vw', justifyContent: 'center', alignItems: 'center'}}>
-        <a href='/'><IconButton  style={{color:'white',background : '#445cc2'}}> <PersonIcon /> </IconButton> </a>
+        <a href='/'><IconButton mini color="secondary" style={{color:'white'}}> <PersonIcon /> </IconButton> </a>
   <Typography style={{width: '100%', padding:'5px'}} variant="title" color="inherit" >
   {window.state.user}
 </Typography>
@@ -105,7 +105,7 @@ class AccountButton extends Component {
       </Button>
 <Link to = {'/create'}  style={{color:'black', textDecoration: 'none'}}> 
 
-    <Button variant="raised"  onClick={this.login.bind(this)} >
+    <Button variant="fab" mini  onClick={this.login.bind(this)} >
         <EditIcon />
         
       </Button> </Link>
