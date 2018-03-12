@@ -198,8 +198,8 @@ class PostComponent extends Component {
          
         </Toolbar>
         </AppBar>    
-        
-        <Card style={{margin: '5vw', marginTop: '20vh'}} >
+        <div style={{width : '100vw', display: 'flex', justifyContent: 'center'}}>
+        <Card style={{ marginTop: '20vh',width : '100%', maxWidth: '600px'}} >
         <CardHeader 
               avatar={<a >
                 <Avatar aria-label="Recipe" >
@@ -215,7 +215,7 @@ class PostComponent extends Component {
               }
               
               title={x.title}
-              subheader={date}
+              subheader={<span>{x.username} <span style={{fontSize: '9pt'}}>On {date}</span></span>}
             />
           <CardContent>
           <Typography component="div">
@@ -239,6 +239,7 @@ class PostComponent extends Component {
           }
         </Card>
         </div>
+        </div>
     }
     
 }
@@ -252,14 +253,17 @@ class MList extends Component {
        let x = window.confirm("Are you sure?")
 
         if(!x) return
-      fetch('/api/comments/' + this.props.data.id, {
+      fetch('/api/deletecomment/', {
         credentials: "same-origin",
           method: 'DELETE',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
               'X-CSRFToken' : window.state.token,
-            }
+            },
+            body : JSON.stringify({
+                id : this.props.data.id
+            })
           }).then(e=>{
               window.location.reload();
           })
@@ -368,14 +372,17 @@ class MListRep extends Component {
 
         if(!x) return
         console.log(this)
-      fetch('/api/replies/' + this.props.data.id, {
+      fetch('/api/deletereply/', {
         credentials: "same-origin",
-          method: 'DELETE',
+          method: 'POST',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
               'X-CSRFToken' : window.state.token,
-            }
+            },
+            body : JSON.stringify({
+                id : this.props.data.id
+            })
           }).then(e=>{
               window.location.reload()
           })
