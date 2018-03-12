@@ -216,7 +216,7 @@ class App extends Component {
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#4CAF50' }, // Purple and green play nicely together.
+    primary: { main: '#07a3b7' }, // Purple and green play nicely together.
     secondary: { main: '#11cb5f' },
     action : {main :'#4CAF50'} // This is just green.A700 as hex.
   },
