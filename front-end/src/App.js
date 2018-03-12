@@ -189,12 +189,6 @@ class App extends Component {
     this.state = window.state
     return (
         <div style={styles.container}>
-        <AppBar color="primary"  style={styles.Toolbar}>
-        <Toolbar >
-          <AccountButton test={this.state.auth} />
-          
-        </Toolbar>
-        </AppBar>
           <div style={styles.paper}>
               <List style={styles.list}>
                
@@ -218,7 +212,14 @@ const theme = createMuiTheme({
   },
 });
 
-
+class If extends Component {
+  render(){
+      if(this.props.test == true){
+          return this.props.children;
+      }
+      return null
+  }
+}
 
 class RR  extends Component {
   static state = {
@@ -319,15 +320,27 @@ class RR  extends Component {
     
   }
   render(){
+    if(!window.state) return null
     return <MuiThemeProvider theme = {theme}> 
     <div style={{paddingBottom: '100px',background: '#00BCD4'}}>
+    
+    
+      
     <Router>
-        <Sswitch>
+        <div>
+        <AppBar color="primary"  style={styles.Toolbar}>
+        <Toolbar >
+          <AccountButton test={window.state && window.state.auth} />
+         
+        </Toolbar>
+        </AppBar>  
+     <Sswitch>
           <Route  exact path='/join' component={Login} />
           <Route  exact path='/post/:pid' component={PostComponent} />
           <Route  exact path='/create' component={MakePost} />
           <Route exact  path='/' component={App} />
         </Sswitch>
+        </div>
     </Router>
     </div>
   </MuiThemeProvider>

@@ -90,12 +90,6 @@ class MakePost extends Component {
     render(){
         return (
             <div>
-                <AppBar color="primary"  style={styles.Toolbar}>
-        <Toolbar >
-          <AccountButton test={window.state && window.state.auth} />
-          
-        </Toolbar>
-        </AppBar>
             <form method = "POST" action="/api/posts/" onSubmit = {this.submit.bind(this)}>
             <div style={{width : '95vw', display: 'flex', justifyContent: 'center', margin: '0 auto'}}>
 
