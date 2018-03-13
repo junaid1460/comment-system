@@ -70,7 +70,7 @@ class Reply extends Component {
     }
     constructor(s){
         super(s)
-        console.log(this.props.text)
+        // console.log(this.props.text)
     }
     keypress(e){
         // console.log(e.key)
@@ -126,7 +126,7 @@ class PostComponent extends Component {
     deletePost() {
         let x = window.confirm("Are you sure?")
           if(!x) return
-          console.log(this)
+        //   console.log(this)
           fetch('/api/deletepost/', {
             credentials: "same-origin",
               method: 'POST',
@@ -204,7 +204,7 @@ class PostComponent extends Component {
         return   <div>
        
         <div style={{margin:'0 auto', width : '95vw', display: 'flex', justifyContent: 'center'}}>
-        <Card style={{ marginTop: '11vh',width : '100%', maxWidth: '600px'}} >
+        <Card style={{ width : '100%', maxWidth: '600px'}} >
         <CardHeader 
               avatar={<a >
                 <Avatar aria-label="Recipe" >
@@ -284,7 +284,7 @@ class MList extends Component {
     }
     
     toggle(){
-        console.log("yes")
+        // console.log("yes")
         this.state.show = !this.state.show
         this.forceUpdate();
     }
@@ -376,7 +376,7 @@ class MListRep extends Component {
         let x = window.confirm("Are you sure?")
 
         if(!x) return
-        console.log(this)
+        // console.log(this)
       fetch('/api/deletereply/', {
         credentials: "same-origin",
           method: 'POST',
@@ -400,7 +400,7 @@ class MListRep extends Component {
     }
     
     toggle(){
-        console.log("yes")
+        // console.log("yes")
         this.state.show = !this.state.show
         this.forceUpdate();
     }
@@ -413,7 +413,7 @@ class MListRep extends Component {
         if(!this.props.show) return null;
         let datec = new Date(e.created_at);
                 datec =  monthNames[datec.getMonth()] + " " + datec.getDate() + ", "+ datec.getFullYear();
-                 return <ListItem key = {e.id}> 
+                 return <ListItem key = {e.id} style={{alignItems:'flex-start'}}> 
                         <Avatar>
                             {e.username.toUpperCase()[0]}
                         </Avatar>

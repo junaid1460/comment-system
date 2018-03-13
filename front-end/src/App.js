@@ -86,7 +86,7 @@ fetch('/login/', {
           window.state.auth = true
           window.location = '/'
         }else{
-          console.log(e.message)
+          // console.log(e.message)
           this.setState({error : e.message})
         }
       })
@@ -130,7 +130,7 @@ fetch('/login/', {
             <form action="/login/" role="form" method="post"  onSubmit={this.onclick.bind(this)}>
             <input type='hidden' name='csrfmiddlewaretoken' value={window.state.token} />
                     <input type="hidden" name="next" value="/" />
-        <div style = {{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', overflow: 'hidden', margin: '0 auto', maxWidth:'400px'}}>
+        <div className="login">
         <Paper style = {{width: '100%', maxWidth: '95vw', display: 'flex', justifyContent: 'center'}}>
         
         <List style={{width : '100%'}}>
@@ -230,7 +230,7 @@ class RR  extends Component {
   deletePost() {
     let x = window.confirm("Are you sure?")
       if(!x) return
-      console.log(this)
+      // console.log(this)
       fetch('/api/deletepost/', {
         credentials: "same-origin",
           method: 'POST',
@@ -322,7 +322,7 @@ class RR  extends Component {
   render(){
     if(!window.state) return null
     return <MuiThemeProvider theme = {theme}> 
-    <div style={{paddingBottom: '100px',background: '#00BCD4'}}>
+    <div style={{background: '#00BCD4', marginBottom: '10px'}}>
     
     
       
@@ -334,6 +334,8 @@ class RR  extends Component {
          
         </Toolbar>
         </AppBar>  
+        <div className="overflowfix">
+        </div>
      <Sswitch>
           <Route  exact path='/join' component={Login} />
           <Route  exact path='/post/:pid' component={PostComponent} />
