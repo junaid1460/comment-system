@@ -41,7 +41,16 @@ services:
     depends_on:
     
       - web
-      
+  build-run-server:
+    image: nginx
+    volumes: ["./front-end/build:/var/www", './nginx.conf:/etc/nginx/nginx.conf', './static:/var/www/files']
+    ports: ["80:80"]
+    networks:
+      loco:
+        ipv4_address: 10.10.10.4
+    depends_on:
+      - build-static
+      - web
   build-static:
     image: node:8
     volumes: ["./front-end:/home/node/app"]
