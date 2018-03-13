@@ -12,7 +12,7 @@ const styles = {
       justifyContent: 'center'
     },
     list : {
-      marginTop: '10vh'
+      // marginTop: '10vh'
     },
     card : {
       width : '100%',
