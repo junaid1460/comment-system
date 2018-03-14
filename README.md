@@ -1,5 +1,7 @@
 # Comment System
 
+
+
 ## Steps
 1. Build image first :
     - run `bash build.sh`
@@ -7,10 +9,11 @@
     - to get django container shell run `docker-compose run shell bash`.
     - then run `python manage.py shell` and do the job.
 3. After setup, to deploy server :
-    1. if you don't have enough RAM (at least 2gb)
+    1. if your end system is linux then run the script file `bash run.sh`
+    2. if you don't have enough RAM (at least 2gb)
         - run `docker-compose up build-static` (for building front-end static files) and wait for it to exit.
         - then run `docker-compose up server`
-    2. If you have 2GB+ ram `docker-compose up build-run-server` (build and run together)
+    3. If you have 2GB+ ram `docker-compose up build-run-server` (build and run together)
 4. How to handle VM reboots or security threats? :
     - do not run docker containers as root.
     - create a group `docker`.
