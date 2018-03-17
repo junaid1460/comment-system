@@ -71,6 +71,7 @@ class MakePost extends Component {
             window.alert('post and title must have at least 10 characters')
             return
         }
+        window.updateApp(true)
         fetch('/api/addpost/', {
             credentials: "same-origin",
               method: 'POST',
@@ -85,7 +86,9 @@ class MakePost extends Component {
                 })
               }).then(v => {
                 window.location.href = '/'
-              }).catch(e=>{console.log("error",e)})
+              }).catch(e=>{
+                window.updateApp(false)                
+              })
     }
     render(){
         return (

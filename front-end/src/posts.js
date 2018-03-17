@@ -127,6 +127,7 @@ class PostComponent extends Component {
         let x = window.confirm("Are you sure?")
           if(!x) return
         //   console.log(this)
+        window.updateApp(true)  
           fetch('/api/deletepost/', {
             credentials: "same-origin",
               method: 'POST',
@@ -140,6 +141,8 @@ class PostComponent extends Component {
                 })
               }).then(e=>{
                   window.location.href = '/'
+              }).catch(e=>{
+                window.updateApp(false) ;
               })
       }
     state = {
@@ -156,20 +159,25 @@ class PostComponent extends Component {
     constructor(props){
         super(props)
         let id = props.match.params.pid;
+        window.updateApp(true)  
         fetch('/api/allofpost/'+ id , {credentials : 'same-origin'})
         .then(res => {
+            
             res.json().then(e=> {
                 if(e.detail){
                     this.setState({error : 'Post not found'})
                 }else{
+                    window.updateApp(false)  
                     this.setState({post : e})
                 }
             })
         }).catch(e=>{
+            window.updateApp(false)  
             this.setState({error: 'Connection error'})
         })
     }
     submit(message){
+        window.updateApp(true)  
         fetch('/api/addcomment/', {
             credentials: "same-origin",
               method: 'POST',
@@ -185,7 +193,9 @@ class PostComponent extends Component {
                 })
               }).then(v => {
                 window.location.reload()
-              }).catch(e=>{console.log("error",e)})
+              }).catch(e=>{
+                window.updateApp(false)  
+              })
 
     }
     toggle(){
@@ -258,6 +268,7 @@ class MList extends Component {
        let x = window.confirm("Are you sure?")
 
         if(!x) return
+        window.updateApp(true)  
       fetch('/api/deletecomment/', {
         credentials: "same-origin",
           method: 'DELETE',
@@ -271,6 +282,8 @@ class MList extends Component {
             })
           }).then(e=>{
               window.location.reload();
+          }).catch(e =>{
+            window.updateApp(false)  
           })
     }
     constructor(p){
@@ -290,7 +303,7 @@ class MList extends Component {
     }
     user = null
     submit(message){
-        
+        window.updateApp(true)  
         fetch('/api/addreply/', {
             credentials: "same-origin",
               method: 'POST',
@@ -306,7 +319,9 @@ class MList extends Component {
                 })
               }).then(v => {
                 window.location.reload()
-              }).catch(e=>{console.log("error",e)})
+              }).catch(e=>{
+                window.updateApp(false);
+              })
     }
     childrep(user){
         
@@ -377,6 +392,7 @@ class MListRep extends Component {
 
         if(!x) return
         // console.log(this)
+        window.updateApp(true)  
       fetch('/api/deletereply/', {
         credentials: "same-origin",
           method: 'POST',
@@ -390,6 +406,8 @@ class MListRep extends Component {
             })
           }).then(e=>{
               window.location.reload()
+          }).catch(e=>{
+            window.updateApp(false)  
           })
     }
     constructor(p){

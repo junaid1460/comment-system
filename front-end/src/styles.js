@@ -1,6 +1,7 @@
 const styles = {
     Toolbar: {
-      maxHeight : '60px'
+      maxHeight : '60px',
+      zIndex: '1'
     },
    paper: {
       margin : '0 auto',
