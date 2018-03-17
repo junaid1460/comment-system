@@ -252,7 +252,7 @@ class RR  extends Component {
   }
   update(val){
     window.showProgress = val;
-    console.log('updating')
+    // console.log('updating')
     this.forceUpdate();    
   }
   constructor(props){
