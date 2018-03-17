@@ -71,6 +71,7 @@ class Login extends Component {
       'password' : this._password
     } )
     // console.log(val);
+    window.updateApp(true)
 fetch('/login/', {
   credentials: "same-origin",
     method: 'POST',
@@ -87,10 +88,13 @@ fetch('/login/', {
           window.location = '/'
         }else{
           // console.log(e.message)
+          window.updateApp(false)  
           this.setState({error : e.message})
         }
       })
-    }).catch(e=>{console.log(e)})
+    }).catch(e=>{
+      window.updateApp(false)      
+    })
       
   }
   _error = []
@@ -206,9 +210,9 @@ class App extends Component {
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#07a3b7' }, // Purple and green play nicely together.
-    secondary: { main: '#11cb5f' },
-    action : {main :'#4CAF50'} // This is just green.A700 as hex.
+    primary: { main: '#2196f3' }, // Purple and green play nicely together.
+    secondary: { main: '#03A9F4' },
+    action : {main :'#03A9F4'} // This is just green.A700 as hex.
   },
 });
 
@@ -246,9 +250,17 @@ class RR  extends Component {
               window.location.reload()
           })
   }
+  update(val){
+    window.showProgress = val;
+    console.log('updating')
+    this.forceUpdate();    
+  }
   constructor(props){
     super(props);
+    window.updateApp = this.update.bind(this)
     window.state = this.state
+    window.showProgress = true
+    
     fetch('/api/auth', {
       credentials: "same-origin"
     }).then((v)=>{
@@ -266,8 +278,9 @@ class RR  extends Component {
       var monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
       ];
-
+      
       value.json().then((v)=>{
+        window.updateApp(false)        
         let val =  v.map(x => {
             let date = new Date(x.created_at);
             date =  monthNames[date.getMonth()] + " " + date.getDate() + ", "+ date.getFullYear();
@@ -315,19 +328,25 @@ class RR  extends Component {
           
             })
           }).catch(e => {
-            console.log(e)
+            window.updateApp(false)
           })
     
   }
   render(){
     if(!window.state) return null
     return <MuiThemeProvider theme = {theme}> 
-    <div style={{background: '#00BCD4', marginBottom: '10px'}}>
+    <div  style={{  marginBottom: '10px'}} >
     
     
       
     <Router>
+        
         <div>
+        <If test={window.showProgress && window.showProgress == true}>
+          <div className="loading">
+            <span > Loading ... </span>
+          </div>
+        </If>
         <AppBar color="primary"  style={styles.Toolbar}>
         <Toolbar >
           <AccountButton test={window.state && window.state.auth} />
